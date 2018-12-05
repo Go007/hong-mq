@@ -20,10 +20,19 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://localhost:3306/test?characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useUnicode=true
     driver-class-name: com.mysql.jdbc.Driver
+    username:
+    password:
 
 server:
   port: 9008
   servlet:
     context-path: /
+
+mybatis:
+  type-aliases-package: com.hong.mapper
+  mapper-locations: classpath:com.hong.mapper.*
+
+
+
 
 
