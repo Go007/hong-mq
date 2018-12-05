@@ -1,9 +1,10 @@
 spring:
   rabbitmq:
-    addresses:
-    username:
-    password:
-    virtual-host: /
+    host: localhost
+    port: 5672
+    username: root
+    password: root
+    virtual-host: /  #该属性可以隔离不同的服务，例如可以设置每个服务对应的virtual-host,这样不同服务的消息可以做到相互隔离
     connection-timeout: 300000
     publisher-confirms: true
     publisher-returns: true
@@ -18,10 +19,10 @@ spring:
     default-property-inclusion: non_null
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/test?characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useUnicode=true
+    url: jdbc:mysql://localhost:3306/sample?characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useUnicode=true
     driver-class-name: com.mysql.jdbc.Driver
-    username:
-    password:
+    username: root
+    password: root
 
 server:
   port: 9008
