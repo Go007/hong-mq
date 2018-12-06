@@ -1,5 +1,6 @@
 package com.hong.bean;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -9,11 +10,13 @@ public class BizMessageBean implements Serializable {
     /**
      * 微服务id
      */
+    @NotBlank(message = "serviceId不能为空")
     private String serviceId;
 
     /**
      * 请求地址
      */
+    @NotBlank(message = "url不能为空")
     private String url;
 
     /**

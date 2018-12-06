@@ -11,4 +11,11 @@
 
     <artifactId>hong-mq-service</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.hong</groupId>
+            <artifactId>hong-mq-api</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
 </project>
