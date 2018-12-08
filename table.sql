@@ -9,3 +9,11 @@ CREATE TABLE IF NOT EXISTS `broker_message_log` (
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00', -- 更新时间
   PRIMARY KEY (`message_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 表 order 订单结构
+CREATE TABLE IF NOT EXISTS `t_order` (
+  `id` varchar(128) NOT NULL, -- 订单ID
+  `name` varchar(128), -- 订单名称 其他业务熟悉忽略
+  `message_id` varchar(128) NOT NULL, -- 消息唯一ID
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

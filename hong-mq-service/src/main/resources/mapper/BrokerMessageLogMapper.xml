@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hong.mapper.BrokerMessageLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.hong.entity.BrokerMessageLog">
+        <id column="message_id" property="messageId" jdbcType="VARCHAR" />
+        <result column="message" property="message" jdbcType="VARCHAR" />
+        <result column="try_count" property="tryCount" jdbcType="BIGINT" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="next_retry" property="nextRetry" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="nextRetry" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="nextRetry" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <select id="query4StatusAndTimeoutMessage" resultMap="BaseResultMap">
+        <![CDATA[
+          select message_id, message, try_count, status, next_retry, create_time, update_time
+              from broker_message_log bml
+              where status = '0'
+              and next_retry <= sysdate()
+          ]]>
+    </select>
+
+    <update id="update4ReSend" >
+        update broker_message_log bml
+        set bml.try_count = bml.try_count + 1,
+        bml.update_time = #{updateTime, jdbcType=TIMESTAMP}
+        where bml.message_id = #{messageId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="changeBrokerMessageLogStatus" >
+        update broker_message_log bml
+        set bml.status = #{status,jdbcType=VARCHAR},
+        bml.update_time = #{updateTime, jdbcType=TIMESTAMP}
+        where bml.message_id = #{messageId,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertOne" parameterType="com.hong.entity.BrokerMessageLog">
+        INSERT INTO broker_message_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="messageId != null">
+                message_id,
+            </if>
+            <if test="message != null">
+                message,
+            </if>
+            <if test="tryCount != null">
+                try_count,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="nextRetry != null">
+                next_retry,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="messageId != null">
+                #{messageId},
+            </if>
+            <if test="message != null">
+                #{message},
+            </if>
+            <if test="tryCount != null">
+                #{tryCount},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="nextRetry != null">
+                #{nextRetry},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+    </insert>
+</mapper>

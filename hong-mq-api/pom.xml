@@ -5,10 +5,17 @@
     <parent>
         <groupId>com.hong</groupId>
         <artifactId>hong-mq</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hong-mq-api</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.hong</groupId>
+            <artifactId>hong-application-common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+    </dependencies>
 </project>

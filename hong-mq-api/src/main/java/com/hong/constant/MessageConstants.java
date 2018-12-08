@@ -9,11 +9,11 @@ public class MessageConstants {
      * 息状态常量类
      */
     public static class StatusConstants{
-        public static final String ORDER_SENDING = "0"; //发送中
+        public static final String MESSAGE_SENDING = "0"; //发送中
 
-        public static final String ORDER_SEND_SUCCESS = "1"; //成功
+        public static final String MESSAGE_SEND_SUCCESS = "1"; //成功
 
-        public static final String ORDER_SEND_FAILURE = "2"; //失败，需要人工介入处理
+        public static final String MESSAGE_SEND_FAILURE = "2"; //失败，需要人工介入处理
     }
 
     /**
