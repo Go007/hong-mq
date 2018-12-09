@@ -21,7 +21,7 @@ public class MessageConstants {
      * 补偿策略：定时任务每次间隔1分钟从表中抓取状态为0的任务，
      * 也即需要重发的消息，(也就是说，在1分钟的时间窗口内，消息没有被确认，则会被定时任务拉取出来重发)
      */
-    public static final int RETRY_TIMEOUT = 1000;
+    public static final int RETRY_TIMEOUT = 60*1000;
 
     /**
      * 交换器常量

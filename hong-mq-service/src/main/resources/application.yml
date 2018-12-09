@@ -2,15 +2,11 @@ spring:
   application:
     name: hong-mq
   profiles:
-    active: dev
+    active: test
 
   http:
     encoding:
       charset: UTF-8
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
-    default-property-inclusion: non_null
 
 server:
   port: 9008

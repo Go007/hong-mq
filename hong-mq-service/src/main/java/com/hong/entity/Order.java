@@ -14,6 +14,8 @@ public class Order implements Serializable {
 
     private String messageId;
 
+    private String status;
+
     public String getId() {
         return id;
     }
@@ -36,5 +38,13 @@ public class Order implements Serializable {
 
     public void setMessageId(String messageId) {
         this.messageId = messageId == null ? null : messageId.trim();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

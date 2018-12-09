@@ -45,6 +45,7 @@ public class OrderService {
         brokerMessageLog.setUpdateTime(new Date());
         brokerMessageLogMapper.insertOne(brokerMessageLog);
         // 发送消息
-        rabbitOrderSender.sendOrder(order);
+        //rabbitOrderSender.sendOrder(order);
+        rabbitOrderSender.sendOrder2(order);
     }
 }

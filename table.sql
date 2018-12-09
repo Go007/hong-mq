@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `broker_message_log` (
   `try_count` int(4) DEFAULT '0', -- 重试次数
   `status` varchar(10) DEFAULT '', -- 消息投递状态  0 投递中 1 投递成功   2 投递失败
   `next_retry` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',  -- 下一次重试时间 或 超时时间
+  -- 有兼容性问题,可以改成通用的 `next_retry` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00', -- 创建时间
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00', -- 更新时间
   PRIMARY KEY (`message_id`)
@@ -15,5 +16,6 @@ CREATE TABLE IF NOT EXISTS `t_order` (
   `id` varchar(128) NOT NULL, -- 订单ID
   `name` varchar(128), -- 订单名称 其他业务熟悉忽略
   `message_id` varchar(128) NOT NULL, -- 消息唯一ID
+  `status` varchar(10) DEFAULT '', -- 订单状态 1 支付中   2 支付成功  3 取消订单
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

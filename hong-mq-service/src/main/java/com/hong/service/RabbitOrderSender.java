@@ -29,7 +29,7 @@ public class RabbitOrderSender {
         public void confirm(CorrelationData correlationData, boolean ack, String cause) {
             System.err.println("correlationData: " + correlationData);
             String messageId = correlationData.getId();
-            if(ack){
+            if (ack) {
                 //如果confirm返回成功 则进行更新
                 brokerMessageLogMapper.changeBrokerMessageLogStatus(messageId, MessageConstants.StatusConstants.MESSAGE_SEND_SUCCESS, new Date());
             } else {
@@ -41,9 +41,23 @@ public class RabbitOrderSender {
 
     //发送消息方法调用: 构建自定义对象消息
     public void sendOrder(Order order) throws Exception {
-        rabbitTemplate.setConfirmCallback(confirmCallback);
+        //rabbitTemplate.setConfirmCallback(confirmCallback); //等效替换 OrderMessageListener
         //消息唯一ID
         CorrelationData correlationData = new CorrelationData(order.getMessageId());
-        rabbitTemplate.convertAndSend(OrderMqConfig.ORDER_TOPIC_EXCHANGE, "order.ABC", order, correlationData);
+        rabbitTemplate.convertAndSend(OrderMqConfig.ORDER_DIRECT_EXCHANGE, OrderMqConfig.ORDER_CREATE_ROUTING_KEY, order, correlationData);
+    }
+
+    /**
+     * 延迟队列,校验订单的支付状态
+     * 如果订单超过1min后仍未支付则需要及时地关闭订单
+     *
+     * @param order
+     * @throws Exception
+     */
+    public void sendOrder2(Order order) throws Exception {
+        rabbitTemplate.convertAndSend(OrderMqConfig.ORDER_DIRECT_EXCHANGE,OrderMqConfig.DELAY_QUEUE_ROUTING_KEY_ORDER, order, message -> {
+            message.getMessageProperties().setExpiration(String.valueOf(OrderMqConfig.ORDER_PAY_CANCEL_TIME));
+            return message;
+        });
     }
 }

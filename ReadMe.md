@@ -27,4 +27,7 @@ RabbitMQ可视化监控平台 http://localhost:15672
     (4)授权
        λ rabbitmqctl set_permissions -p "/" root ".*" ".*" ".*"
        Setting permissions for user "root" in vhost "/" ...
-  
+       
+4. RabbitMQ之延迟队列(延迟消费+延迟重试)
+   RabbitMQ的两个特性，一个是Time-To-Live Extensions，另一个是Dead Letter Exchanges       
+   https://www.cnblogs.com/xishuai/p/spring-boot-rabbitmq-delay-queue.html

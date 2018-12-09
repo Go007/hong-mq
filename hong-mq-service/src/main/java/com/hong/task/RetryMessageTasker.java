@@ -29,7 +29,7 @@ public class RetryMessageTasker {
     @Autowired
     private BrokerMessageLogMapper brokerMessageLogMapper;
 
-    @Scheduled(initialDelay = 5000, fixedDelay = 5000)
+  //  @Scheduled(initialDelay = 5000, fixedDelay = 5000)
     public void reSend(){
         logger.info("定时重试失败消息开始。。。。");
         //pull status = 0 and timeout message
