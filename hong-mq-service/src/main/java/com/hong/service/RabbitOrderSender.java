@@ -1,5 +1,6 @@
 package com.hong.service;
 
+import com.hong.config.DelayQueueConfig;
 import com.hong.config.DelayQueueConfig2;
 import com.hong.config.OrderMqConfig;
 import com.hong.constant.MessageConstants;
@@ -58,7 +59,7 @@ public class RabbitOrderSender {
     public void sendOrder2(Order order) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println("订单入库,1min后校验该订单状态,当前时间:" + sdf.format(new Date()) );
-        rabbitTemplate.convertAndSend("DEAD_LETTER_EXCHANGE","DELAY_ROUTING_KEY", order, message -> {
+        rabbitTemplate.convertAndSend(DelayQueueConfig.DEAD_LETTER_EXCHANGE,DelayQueueConfig.DELAY_ROUTING_KEY, order, message -> {
             message.getMessageProperties().setExpiration(String.valueOf(OrderMqConfig.ORDER_PAY_CANCEL_TIME));
             return message;
         });

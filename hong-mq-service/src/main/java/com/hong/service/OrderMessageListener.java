@@ -1,6 +1,7 @@
 package com.hong.service;
 
 import com.alibaba.fastjson.JSON;
+import com.hong.config.DelayQueueConfig;
 import com.hong.config.OrderMqConfig;
 import com.hong.constant.MessageConstants;
 import com.hong.entity.Order;
@@ -49,9 +50,9 @@ public class OrderMessageListener {
     }
 
     @RabbitHandler
-    @RabbitListener(queues = "IMMEDIATE_QUEUE")
+    @RabbitListener(queues = DelayQueueConfig.IMMEDIATE_QUEUE)
     public void handleNoPayOrder(Order order) {
-        logger.info("延时消息[start]：出队列[{}]，消息内容：{},", "IMMEDIATE_QUEUE" , order);
+        logger.info("延时消息[start]：出队列[{}]，消息内容：{},", DelayQueueConfig.IMMEDIATE_QUEUE , order);
         String orderId = order.getId();
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
