@@ -54,42 +54,4 @@ public class OrderMqConfig {
     public Binding orderDirectBinding() { // point-to-point
         return BindingBuilder.bind(orderDirectQueue()).to(orderDirectExchange()).with(ORDER_CREATE_ROUTING_KEY);
     }
-
-    /********************************延迟队列***********************************/
-    /**
-     * 延迟消费步骤
-     * 生产者 ---> 缓冲队列 ---> DLX(Dead Letter Exchange) ---->过期后通过DLX转发到实际消费队列--->实际消费队列--->消费者
-     */
-    //TTL配置在消息上的缓冲队列
-    public static final String DELAY_QUEUE_PER_MESSAGE_TTL_ORDER = "TTL.QUEUE.PAY.ORDER";
-
-    public static final String DELAY_QUEUE_ROUTING_KEY_ORDER = "DELAY.QUEUE.ROUTING.ORDER";
-
-    public static final String TTL_QUEUE_NOTIFY_ORDER = "TTL.QUEUE.NOTIFY.ORDER";
-
-    public static final String TTL_NOTIFY_ROUTING_KEY_ORDER = "TTL.NOTIFY.ROUTING.KEY.ORDER";
-
-    @Bean
-    Queue delayQueuePerMessageTTL() {
-        return QueueBuilder.durable(DELAY_QUEUE_PER_MESSAGE_TTL_ORDER)
-                .withArgument("x-dead-letter-exchange", ORDER_DIRECT_EXCHANGE) // DLX，dead letter发送到的exchange
-                .withArgument("x-dead-letter-routing-key", TTL_NOTIFY_ROUTING_KEY_ORDER) // dead letter携带的routing key
-                .build();
-    }
-
-    @Bean
-    Binding dlxBinding(Queue delayQueuePerMessageTTL, DirectExchange orderDirectExchange) {
-        return BindingBuilder.bind(delayQueuePerMessageTTL).to(orderDirectExchange).with(DELAY_QUEUE_ROUTING_KEY_ORDER);
-    }
-
-    @Bean
-    public Queue orderPayNotifyQueue() {
-        return new Queue(TTL_QUEUE_NOTIFY_ORDER);
-    }
-
-    @Bean
-    Binding bindingNotifyMessage(Queue orderPayNotifyQueue, DirectExchange orderDirectExchange) {
-        return BindingBuilder.bind(orderPayNotifyQueue).to(orderDirectExchange).with(TTL_NOTIFY_ROUTING_KEY_ORDER);
-    }
-    /********************************延迟队列***********************************/
 }

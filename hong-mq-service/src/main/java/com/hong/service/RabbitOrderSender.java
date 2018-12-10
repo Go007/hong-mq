@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -50,12 +51,13 @@ public class RabbitOrderSender {
     /**
      * 延迟队列,校验订单的支付状态
      * 如果订单超过1min后仍未支付则需要及时地关闭订单
-     *
      * @param order
      * @throws Exception
      */
     public void sendOrder2(Order order) throws Exception {
-        rabbitTemplate.convertAndSend(OrderMqConfig.ORDER_DIRECT_EXCHANGE,OrderMqConfig.DELAY_QUEUE_ROUTING_KEY_ORDER, order, message -> {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println("订单入库,1min后校验该订单状态,当前时间:" + sdf.format(new Date()) );
+        rabbitTemplate.convertAndSend("DEAD_LETTER_EXCHANGE","DELAY_ROUTING_KEY", order, message -> {
             message.getMessageProperties().setExpiration(String.valueOf(OrderMqConfig.ORDER_PAY_CANCEL_TIME));
             return message;
         });
