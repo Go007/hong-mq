@@ -46,6 +46,7 @@ public class OrderService {
         brokerMessageLogMapper.insertOne(brokerMessageLog);
         // 发送消息
         //rabbitOrderSender.sendOrder(order);
-        rabbitOrderSender.sendOrder2(order);
+        //rabbitOrderSender.sendOrder2(order);
+        rabbitOrderSender.sendOrder3(order);
     }
 }

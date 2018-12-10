@@ -1,5 +1,6 @@
 package com.hong.service;
 
+import com.hong.config.DelayQueueConfig2;
 import com.hong.config.OrderMqConfig;
 import com.hong.constant.MessageConstants;
 import com.hong.entity.Order;
@@ -61,5 +62,11 @@ public class RabbitOrderSender {
             message.getMessageProperties().setExpiration(String.valueOf(OrderMqConfig.ORDER_PAY_CANCEL_TIME));
             return message;
         });
+    }
+
+    public void sendOrder3(Order order) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println("订单入库,1min后校验该订单状态,当前时间:" + sdf.format(new Date()) );
+        rabbitTemplate.convertAndSend(DelayQueueConfig2.DELAY_QUEUE_PER_MESSAGE_TTL_NAME, order, new ExpirationMessagePostProcessor(OrderMqConfig.ORDER_PAY_CANCEL_TIME));
     }
 }
