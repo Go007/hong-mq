@@ -31,18 +31,8 @@ public class DelayQueueConfig2 {
     final static String DELAY_PROCESS_QUEUE_NAME = "delay_process_queue";
 
     /**
-     * 路由到delay_queue_per_queue_ttl（统一失效时间的队列）的exchange（用于队列延迟重试）
-     */
-    public final static String PER_QUEUE_TTL_EXCHANGE_NAME = "per_queue_ttl_exchange";
-
-    /**
-     * 发送到该队列的message会在一段时间后过期进入到delay_process_queue
-     * 队列里所有的message都有统一的失效时间
-     */
-    public final static String DELAY_QUEUE_PER_QUEUE_TTL_NAME = "delay_queue_per_queue_ttl";
-
-    /**
      * 创建delay_queue_per_message_ttl队列
+     * 队列延迟消费，针对每个消息设置ttl过期时间
      * @return
      */
     @Bean
@@ -99,5 +89,57 @@ public class DelayQueueConfig2 {
         container.setQueueNames(DELAY_PROCESS_QUEUE_NAME); // 监听delay_process_queue
         container.setMessageListener(new MessageListenerAdapter(processReceiver));
         return container;
+    }
+
+    /*****************************************************************************************/
+    /**
+     * 路由到delay_queue_per_queue_ttl（统一失效时间的队列）的exchange（用于队列延迟重试）
+     */
+    public final static String PER_QUEUE_TTL_EXCHANGE_NAME = "per_queue_ttl_exchange";
+
+    /**
+     * 发送到该队列的message会在一段时间后过期进入到delay_process_queue
+     * 队列里所有的message都有统一的失效时间
+     */
+    public final static String DELAY_QUEUE_PER_QUEUE_TTL_NAME = "delay_queue_per_queue_ttl";
+
+    final static int QUEUE_EXPIRATION = 4000;
+
+    /**
+     * 创建per_queue_ttl_exchange
+     *
+     * @return
+     */
+    @Bean
+    DirectExchange perQueueTTLExchange() {
+        return new DirectExchange(PER_QUEUE_TTL_EXCHANGE_NAME);
+    }
+
+    /**
+     * 创建delay_queue_per_queue_ttl队列
+     * 队列延迟消费，针对整个队列设置ttl过期时间
+     * @return
+     */
+    @Bean
+    Queue delayQueuePerQueueTTL() {
+        return QueueBuilder.durable(DELAY_QUEUE_PER_QUEUE_TTL_NAME)
+                .withArgument("x-dead-letter-exchange", DELAY_EXCHANGE_NAME) // DLX
+                .withArgument("x-dead-letter-routing-key", DELAY_PROCESS_QUEUE_NAME) // dead letter携带的routing key
+                .withArgument("x-message-ttl", QUEUE_EXPIRATION) // 设置队列的过期时间
+                .build();
+    }
+
+    /**
+     * 将per_queue_ttl_exchange绑定到delay_queue_per_queue_ttl队列（统一失效时间，用于队列延迟重试）
+     *
+     * @param delayQueuePerQueueTTL
+     * @param perQueueTTLExchange
+     * @return
+     */
+    @Bean
+    Binding queueTTLBinding(Queue delayQueuePerQueueTTL, DirectExchange perQueueTTLExchange) {
+        return BindingBuilder.bind(delayQueuePerQueueTTL)
+                .to(perQueueTTLExchange)
+                .with(DELAY_QUEUE_PER_QUEUE_TTL_NAME);
     }
 }
