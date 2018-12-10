@@ -47,6 +47,7 @@ public class OrderService {
         // 发送消息
         //rabbitOrderSender.sendOrder(order);
         //rabbitOrderSender.sendOrder2(order);
-        rabbitOrderSender.sendOrder3(order);
+        //rabbitOrderSender.sendOrder3(order);
+        rabbitOrderSender.sendOrder4(order);
     }
 }

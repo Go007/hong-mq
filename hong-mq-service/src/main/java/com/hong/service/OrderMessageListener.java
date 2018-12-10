@@ -3,6 +3,7 @@ package com.hong.service;
 import com.alibaba.fastjson.JSON;
 import com.hong.config.DelayQueueConfig;
 import com.hong.config.OrderMqConfig;
+import com.hong.config.XdelayConfig;
 import com.hong.constant.MessageConstants;
 import com.hong.entity.Order;
 import com.hong.mapper.BrokerMessageLogMapper;
@@ -50,7 +51,8 @@ public class OrderMessageListener {
     }
 
     @RabbitHandler
-    @RabbitListener(queues = DelayQueueConfig.IMMEDIATE_QUEUE)
+   // @RabbitListener(queues = DelayQueueConfig.IMMEDIATE_QUEUE)
+    @RabbitListener(queues = XdelayConfig.IMMEDIATE_QUEUE_XDELAY)
     public void handleNoPayOrder(Order order) {
         logger.info("延时消息[start]：出队列[{}]，消息内容：{},", DelayQueueConfig.IMMEDIATE_QUEUE , order);
         String orderId = order.getId();

@@ -3,9 +3,13 @@ package com.hong.service;
 import com.hong.config.DelayQueueConfig;
 import com.hong.config.DelayQueueConfig2;
 import com.hong.config.OrderMqConfig;
+import com.hong.config.XdelayConfig;
 import com.hong.constant.MessageConstants;
 import com.hong.entity.Order;
 import com.hong.mapper.BrokerMessageLogMapper;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,4 +74,18 @@ public class RabbitOrderSender {
         System.out.println("订单入库,1min后校验该订单状态,当前时间:" + sdf.format(new Date()) );
         rabbitTemplate.convertAndSend(DelayQueueConfig2.DELAY_QUEUE_PER_MESSAGE_TTL_NAME, order, new ExpirationMessagePostProcessor(OrderMqConfig.ORDER_PAY_CANCEL_TIME));
     }
+
+    public void sendOrder4(Order order) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println("订单入库,1min后校验该订单状态,当前时间:" + sdf.format(new Date()) );
+        this.rabbitTemplate.convertAndSend(XdelayConfig.DELAYED_EXCHANGE_XDELAY, XdelayConfig.DELAY_ROUTING_KEY_XDELAY, order, new MessagePostProcessor() {
+            @Override
+            public Message postProcessMessage(Message message) throws AmqpException {
+                message.getMessageProperties().setDelay((int) OrderMqConfig.ORDER_PAY_CANCEL_TIME);
+                System.out.println(sdf.format(new Date()) + " Delay sent.");
+                return message;
+            }
+        });
+    }
+
 }
