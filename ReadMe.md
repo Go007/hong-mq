@@ -32,3 +32,13 @@ RabbitMQ可视化监控平台 http://localhost:15672
    RabbitMQ的两个特性，一个是Time-To-Live Extensions，另一个是Dead Letter Exchanges       
    https://www.cnblogs.com/xishuai/p/spring-boot-rabbitmq-delay-queue.html
    https://blog.csdn.net/zhangyuxuan2/article/details/82986802
+   
+5.RabbitMQ如何实现高可靠性,即保证生产数据不丢失?
+分以下情况进行讨论:
+(1)线上服务宕机时,如消费者服务，刚收到了一个订单消息，但是在完成消息的处理之前，也就是还没对订单完成仓储调度发货，结果这个仓储服务突然就宕机了，这个时候会发生什么事情？
+   RabbitMQ的自动ACK机制:默认情况下,RabbitMQ在投递完一条消息后就自动确认这条消息消费完毕了,然后把这条消息标记为删除.
+   channel.basicConsume(QUEUE_NAME,Boolean.FALSE,deliverCallback,consumerTag -> {});
+   == Boolean.FALSE:关闭RabbitMQ默认的AutoAck
+   
+   
+   
