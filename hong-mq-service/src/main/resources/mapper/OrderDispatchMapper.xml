@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hong.mapper.OrderDispatchMapper">
+
+    <resultMap id="BaseResultMap" type="com.hong.entity.OrderDispatch">
+        <id column="dispatch_id" property="dispatchId" jdbcType="VARCHAR" />
+        <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+        <result column="dispatch_content" property="dispatchContent" jdbcType="VARCHAR" />
+        <result column="dispatch_status" property="dispatchStatus" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="insertOne" parameterType="com.hong.entity.OrderDispatch">
+        INSERT INTO t_distributed_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dispatchId != null">
+                dispatch_id,
+            </if>
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="dispatchContent != null">
+                dispatch_content,
+            </if>
+            <if test="dispatchStatus != null">
+                dispatch_status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dispatchId != null">
+                #{dispatchId},
+            </if>
+            <if test="orderId != null">
+                #{orderId},
+            </if>
+            <if test="dispatchContent != null">
+                #{dispatchContent},
+            </if>
+            <if test="dispatchStatus != null">
+                #{dispatchStatus},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

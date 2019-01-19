@@ -19,3 +19,21 @@ CREATE TABLE IF NOT EXISTS `t_order` (
   `status` varchar(10) DEFAULT '', -- 订单状态 1 支付中   2 支付成功  3 取消订单
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--订单分布式事务-本地消息表(需要和订单表在一个schema下)
+CREATE TABLE IF NOT EXISTS t_distributed_message(
+  msg_id  varchar(128) DEFAULT NOT NULL,
+  msg_content VARCHAR(1024) DEFAULT NULL COMMENT '消息内容',
+  msg_status int(11) DEFAULT 0 COMMENT '是否发送到MQ,0-未发送，1-已发送',
+  create_time datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--运单表，用于分派订单给外卖小哥
+CREATE TABLE IF NOT EXISTS t_order_dispatch(
+  dispatch_id varchar(128) DEFAULT NOT NULL COMMENT '调度流水',
+  order_id varchar(128) DEFAULT NOT NULL COMMENT '订单id',
+  dispatch_status int(11) DEFAULT 0 COMMENT '调度状态',
+  dispatch_content VARCHAR(1024) DEFAULT NULL COMMENT '调度内容（送餐员，路线）',
+  create_time datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (order_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

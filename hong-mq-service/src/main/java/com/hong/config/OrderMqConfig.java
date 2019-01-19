@@ -54,4 +54,25 @@ public class OrderMqConfig {
     public Binding orderDirectBinding() { // point-to-point
         return BindingBuilder.bind(orderDirectQueue()).to(orderDirectExchange()).with(ORDER_CREATE_ROUTING_KEY);
     }
+
+    public static final String ORDER_CREATE_EXCHANGE = "ORDER.CREATE.EXCHANGE";
+    public static final String ORDER_CREATE_RK = "ORDER.CREATE.RK";
+    public static final String ORDER_CREATE_QUEUE = "ORDER.CREATE.QUEUE";
+
+    @Bean
+    public DirectExchange orderCreateExchange() {
+        return (DirectExchange) ExchangeBuilder.directExchange(ORDER_CREATE_EXCHANGE)
+                .durable(true)
+                .build();
+    }
+
+    @Bean
+    public Queue orderCreateQueue() {
+        return new Queue(ORDER_CREATE_QUEUE);
+    }
+
+    @Bean
+    public Binding orderCreateBinding() { // point-to-point
+        return BindingBuilder.bind(orderCreateQueue()).to(orderCreateExchange()).with(ORDER_CREATE_RK);
+    }
 }

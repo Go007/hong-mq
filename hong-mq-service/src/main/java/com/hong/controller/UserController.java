@@ -50,7 +50,8 @@ public class UserController {
         order.setName("测试创建订单");
         order.setMessageId(System.currentTimeMillis() + "$" + UUID.randomUUID().toString());
         order.setStatus("1");
-        orderService.createOrder(order);
+        //orderService.createOrder(order);
+        orderService.createOrder2(order);
     }
 
 }

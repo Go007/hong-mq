@@ -2,11 +2,16 @@ spring:
   application:
     name: hong-mq
   profiles:
-    active: test
+    active: dev
 
   http:
     encoding:
       charset: UTF-8
+
+  rabbitmq:
+    publisher-confirms: true  # 重要！开启消息发送确认机制
+    listener:
+      acknowledge-mode: MANUAL # 重要！ 开启手动ACK，控制消息在MQ中的删除，重发
 
 server:
   port: 9008

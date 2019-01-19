@@ -8,7 +8,7 @@
         <result column="try_count" property="tryCount" jdbcType="BIGINT" />
         <result column="status" property="status" jdbcType="VARCHAR" />
         <result column="next_retry" property="nextRetry" jdbcType="TIMESTAMP" />
-        <result column="create_time" property="nextRetry" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="nextRetry" jdbcType="TIMESTAMP" />
     </resultMap>
 

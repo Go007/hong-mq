@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hong.mapper.DistributedMessageMapper">
+
+    <resultMap id="BaseResultMap" type="com.hong.entity.DistributedMessage">
+        <id column="msg_id" property="msgId" jdbcType="VARCHAR" />
+        <result column="msg_content" property="msgContent" jdbcType="VARCHAR" />
+        <result column="msg_status" property="msgStatus" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="insertOne" parameterType="com.hong.entity.DistributedMessage">
+        INSERT INTO t_distributed_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">
+                msg_id,
+            </if>
+            <if test="msgContent != null">
+                msg_content,
+            </if>
+            <if test="msgStatus != null">
+                msg_status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">
+                #{msgId},
+            </if>
+            <if test="msgContent != null">
+                #{msgContent},
+            </if>
+            <if test="msgStatus != null">
+                #{msgStatus},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>
