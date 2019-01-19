@@ -11,7 +11,7 @@
     </resultMap>
 
     <insert id="insertOne" parameterType="com.hong.entity.OrderDispatch">
-        INSERT INTO t_distributed_message
+        INSERT INTO t_order_dispatch
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="dispatchId != null">
                 dispatch_id,
@@ -26,7 +26,7 @@
                 dispatch_status,
             </if>
             <if test="createTime != null">
-                create_time,
+                create_time
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -43,7 +43,7 @@
                 #{dispatchStatus},
             </if>
             <if test="createTime != null">
-                #{createTime},
+                #{createTime}
             </if>
         </trim>
     </insert>
